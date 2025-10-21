@@ -1,0 +1,46 @@
+# Gillies Workshop Hackathon 2025 - Python Requirements
+# This file documents the packages installed in the conda environment
+
+# RAPIDS packages from NVIDIA PyPI (--extra-index-url=https://pypi.nvidia.com)
+# All RAPIDS packages pinned to version 25.10.*
+cudf-cu13==25.10.*
+dask-cudf-cu13==25.10.*
+cuml-cu13==25.10.*
+cugraph-cu13==25.10.*
+nx-cugraph-cu13==25.10.*
+cuxfilter-cu13==25.10.*
+cucim-cu13==25.10.*
+pylibraft-cu13==25.10.*
+raft-dask-cu13==25.10.*
+cuvs-cu13==25.10.*
+
+# Medical imaging ML toolkit
+honeybee-ml
+
+# JupyterLab and notebook support
+jupyterlab>=4.0.0
+ipywidgets>=8.0.0
+
+# Core data science packages
+pandas>=2.0.0
+numpy>=1.24.0
+scikit-learn>=1.3.0
+
+# Visualization libraries
+matplotlib>=3.7.0
+seaborn>=0.12.0
+plotly>=5.14.0
+
+# HuggingFace tools for dataset downloads
+huggingface_hub[cli]>=0.20.0
+
+# Additional useful packages for ML competitions
+scipy>=1.10.0
+tqdm>=4.65.0
+
+# Note: This requirements.txt is for documentation purposes.
+# The setup.sh script handles the actual installation with proper
+# configuration for RAPIDS packages from NVIDIA PyPI.
+#
+# To install manually:
+# pip install --extra-index-url=https://pypi.nvidia.com -r requirements.txt

@@ -205,3 +205,62 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# ========================================
+# Hackathon 2025 Specific
+# ========================================
+
+# Miniconda installation
+miniconda3/
+Miniconda3-*.sh
+
+# Conda environments
+conda-meta/
+pkgs/
+
+# Dataset directories (large files from HuggingFace)
+hackathon-data/
+data/
+datasets/
+
+# Pathology image files (very large)
+*.tif
+*.tiff
+*.svs
+*.ndpi
+
+# Model checkpoints and weights
+models/
+checkpoints/
+*.pt
+*.pth
+*.h5
+*.ckpt
+*.pkl
+*.joblib
+
+# Submission files
+submissions/
+submission_*.csv
+
+# Experiment tracking
+experiments/
+runs/
+logs/
+wandb/
+mlruns/
+
+# Helper scripts created by setup
+activate_hackathon.sh
+verify_setup.py
+
+# Temporary and cache files
+.cache/
+cache/
+tmp/
+temp/
+
+# Large output files
+*.npy
+*.npz
+*.parquet
