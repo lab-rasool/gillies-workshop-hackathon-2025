@@ -126,12 +126,12 @@ print_status "Creating data directory at $DATA_DIR..."
 mkdir -p "$DATA_DIR"
 
 # Download datasets from HuggingFace
-print_status "Downloading datasets from HuggingFace (Lab-Rasool/hackathon-2025)..."
+print_status "Downloading datasets from HuggingFace (Lab-Rasool/hackathon)..."
 print_warning "Note: Dataset downloads are large (~163GB compressed, ~694GB extracted). This may take a while..."
 
 # Download train split (CSV + tar.gz images)
 print_status "Downloading training dataset..."
-huggingface-cli download Lab-Rasool/hackathon-2025 \
+huggingface-cli download Lab-Rasool/hackathon \
     --repo-type dataset \
     --local-dir "$DATA_DIR" \
     --include "train/train.csv" \
@@ -139,7 +139,7 @@ huggingface-cli download Lab-Rasool/hackathon-2025 \
 
 # Download test split (CSV + tar.gz images)
 print_status "Downloading test dataset..."
-huggingface-cli download Lab-Rasool/hackathon-2025 \
+huggingface-cli download Lab-Rasool/hackathon \
     --repo-type dataset \
     --local-dir "$DATA_DIR" \
     --include "test/test.csv" \
