@@ -66,6 +66,8 @@ fi
 conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
 conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
 
+source ~/miniconda3/bin/activate
+conda init --all
 
 # Create conda environment
 ENV_NAME="hackathon"
