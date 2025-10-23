@@ -17,17 +17,8 @@ TISSUE_THRESHOLD = 0.5  # Minimum tissue probability to extract embeddings
 OUTPUT_DIR.mkdir(exist_ok=True)
 DATA_OUTPUT_DIR.mkdir(exist_ok=True)
 
-# Download UNI model from HuggingFace if not already cached
-print("Initializing UNI foundation model...")
-uni_model_path = hf_hub_download(
-    repo_id='MahmoodLab/UNI',
-    filename='pytorch_model.bin',
-    cache_dir='./weights/uni_cache'
-)
-print(f"✓ UNI model ready: {uni_model_path}")
-
 # Initialize processor with UNI model
-processor = PathologyProcessor(model="uni", model_path=uni_model_path)
+processor = PathologyProcessor(model="uni")
 
 ##############################################################################
 # PART 1: Load WSI and Tiles
