@@ -37,6 +37,19 @@ huggingface_hub[cli]>=0.20.0
 # Additional useful packages for ML competitions
 scipy>=1.10.0
 tqdm>=4.65.0
+pytesseract
+PyPDF2
+pdf2image
+opencv-python
+nltk
+SimpleITK
+langchain==0.3.27
+albumentations
+pydicom
+nibabel
+onnxruntime
+onnxruntime-gpu
+timm
 
 # Note: This requirements.txt is for documentation purposes.
 # The setup.sh script handles the actual installation with proper
