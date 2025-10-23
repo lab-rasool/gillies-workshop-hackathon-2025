@@ -38,6 +38,12 @@ fi
 if ! command -v conda &> /dev/null; then
     print_status "Miniconda not found. Installing Miniconda..."
 
+    # Check if miniconda3 directory exists but conda is not in PATH
+    if [ -d "$HOME/miniconda3" ]; then
+        print_warning "Miniconda directory exists but conda not in PATH. Removing old installation..."
+        rm -rf "$HOME/miniconda3"
+    fi
+
     # Download Miniconda installer
     wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh
 
@@ -79,8 +85,8 @@ if conda env list | grep -q "^$ENV_NAME "; then
     conda env remove -n $ENV_NAME -y
 fi
 
-# Create environment with Python 3.10 (compatible with RAPIDS)
-conda create -n $ENV_NAME python=3.10 -y
+# Create environment with Python 3.13 (compatible with RAPIDS)
+conda create -n $ENV_NAME python=3.13 -y
 print_status "Conda environment created successfully!"
 
 # Activate the environment
