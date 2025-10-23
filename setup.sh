@@ -66,15 +66,6 @@ fi
 conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
 conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
 
-# Install uv package manager
-if ! command -v uv &> /dev/null; then
-    print_status "Installing uv package manager..."
-    curl -LsSf https://astral.sh/uv/install.sh | sh
-    export PATH="$HOME/.cargo/bin:$PATH"
-    print_status "uv installed successfully!"
-else
-    print_status "uv already installed."
-fi
 
 # Create conda environment
 ENV_NAME="hackathon"
@@ -95,11 +86,11 @@ source activate $ENV_NAME
 
 # Upgrade pip
 print_status "Upgrading pip..."
-uv pip install --upgrade pip
+pip install --upgrade pip
 
 # Install RAPIDS packages from NVIDIA PyPI
 print_status "Installing RAPIDS packages (this may take several minutes)..."
-uv pip install \
+pip install \
     --extra-index-url=https://pypi.nvidia.com \
     "cudf-cu13==25.10.*" \
     "dask-cudf-cu13==25.10.*" \
@@ -116,15 +107,15 @@ print_status "RAPIDS packages installed successfully!"
 
 # Install honeybee-ml
 print_status "Installing honeybee-ml..."
-uv pip install honeybee-ml
+pip install honeybee-ml
 
 # Install JupyterLab and common data science packages
 print_status "Installing JupyterLab and essential packages..."
-uv pip install jupyterlab ipywidgets matplotlib seaborn plotly scikit-learn pandas numpy
+pip install jupyterlab ipywidgets matplotlib seaborn plotly scikit-learn pandas numpy
 
 # Install HuggingFace CLI for dataset downloads
 print_status "Installing HuggingFace CLI..."
-uv pip install huggingface_hub[cli]
+pip install huggingface_hub[cli]
 
 # Create data directory
 DATA_DIR="$HOME/hackathon-data"
