@@ -119,9 +119,9 @@ uv pip install honeybee-ml
 print_status "Installing JupyterLab and essential packages..."
 uv pip install jupyterlab ipywidgets matplotlib seaborn plotly scikit-learn pandas numpy
 
-# Install HuggingFace CLI for dataset downloads
-print_status "Installing HuggingFace CLI..."
-uv pip install huggingface_hub[cli]
+# Install HuggingFace CLI with hf_transfer for faster downloads
+print_status "Installing HuggingFace CLI with hf_transfer acceleration..."
+uv pip install huggingface_hub[cli,hf_transfer]
 
 # Create data directory
 DATA_DIR="$HOME/hackathon-data"
@@ -131,6 +131,10 @@ mkdir -p "$DATA_DIR"
 # Download datasets from HuggingFace
 print_status "Downloading datasets from HuggingFace (Lab-Rasool/hackathon)..."
 print_warning "Note: Dataset downloads are large (~694GB total). This may take a while..."
+print_status "Using hf_transfer for accelerated downloads (optimized for high-bandwidth connections)..."
+
+# Enable hf_transfer for faster downloads
+export HF_HUB_ENABLE_HF_TRANSFER=1
 
 # Download entire dataset (CSV files + images)
 print_status "Downloading training and test datasets..."
