@@ -84,13 +84,19 @@ print_status "Conda environment created successfully!"
 print_status "Activating conda environment..."
 source activate $ENV_NAME
 
+# Install uv for faster pip installs
+print_status "Installing uv (fast Python package installer)..."
+curl -LsSf https://astral.sh/uv/install.sh | sh
+export PATH="$HOME/.local/bin:$PATH"
+print_status "uv installed successfully!"
+
 # Upgrade pip
 print_status "Upgrading pip..."
 pip install --upgrade pip
 
-# Install RAPIDS packages from NVIDIA PyPI
-print_status "Installing RAPIDS packages (this may take several minutes)..."
-pip install \
+# Install RAPIDS packages from NVIDIA PyPI using uv
+print_status "Installing RAPIDS packages with uv (this may take several minutes)..."
+uv pip install \
     --extra-index-url=https://pypi.nvidia.com \
     "cudf-cu13==25.10.*" \
     "dask-cudf-cu13==25.10.*" \
@@ -107,15 +113,15 @@ print_status "RAPIDS packages installed successfully!"
 
 # Install honeybee-ml
 print_status "Installing honeybee-ml..."
-pip install honeybee-ml
+uv pip install honeybee-ml
 
 # Install JupyterLab and common data science packages
 print_status "Installing JupyterLab and essential packages..."
-pip install jupyterlab ipywidgets matplotlib seaborn plotly scikit-learn pandas numpy
+uv pip install jupyterlab ipywidgets matplotlib seaborn plotly scikit-learn pandas numpy
 
 # Install HuggingFace CLI for dataset downloads
 print_status "Installing HuggingFace CLI..."
-pip install huggingface_hub[cli]
+uv pip install huggingface_hub[cli]
 
 # Create data directory
 DATA_DIR="$HOME/hackathon-data"
@@ -124,81 +130,28 @@ mkdir -p "$DATA_DIR"
 
 # Download datasets from HuggingFace
 print_status "Downloading datasets from HuggingFace (Lab-Rasool/hackathon)..."
-print_warning "Note: Dataset downloads are large (~163GB compressed, ~694GB extracted). This may take a while..."
+print_warning "Note: Dataset downloads are large (~694GB total). This may take a while..."
 
-# Download train split (CSV + tar.gz images)
-print_status "Downloading training dataset..."
+# Download entire dataset (CSV files + images)
+print_status "Downloading training and test datasets..."
 huggingface-cli download Lab-Rasool/hackathon \
     --repo-type dataset \
-    --local-dir "$DATA_DIR" \
-    --include "train/train.csv" \
-    --include "train/images.tar.gz"
-
-# Download test split (CSV + tar.gz images)
-print_status "Downloading test dataset..."
-huggingface-cli download Lab-Rasool/hackathon \
-    --repo-type dataset \
-    --local-dir "$DATA_DIR" \
-    --include "test/test.csv" \
-    --include "test/images.tar.gz"
+    --local-dir "$DATA_DIR"
 
 print_status "Datasets downloaded to $DATA_DIR"
 
-# Extract compressed archives
-print_status "Extracting image archives..."
-
-# Check if pigz is available for faster parallel decompression
-if command -v pigz &> /dev/null; then
-    print_status "Using pigz for parallel decompression..."
-    DECOMPRESS_CMD="pigz -dc"
+# Verify datasets
+if [ -f "$DATA_DIR/train/train.csv" ] && [ -d "$DATA_DIR/train/images" ]; then
+    print_status "Training dataset verified: CSV and images found"
 else
-    print_warning "pigz not found. Using standard gzip (slower)..."
-    print_status "To speed up future extractions, install pigz: sudo apt-get install pigz"
-    DECOMPRESS_CMD="gzip -dc"
+    print_warning "Training dataset incomplete. Please check $DATA_DIR/train/"
 fi
 
-# Extract train images
-if [ -f "$DATA_DIR/train/images.tar.gz" ]; then
-    print_status "Extracting training images (~82GB compressed -> ~481GB extracted)..."
-    cd "$DATA_DIR/train"
-    $DECOMPRESS_CMD images.tar.gz | tar xf -
-
-    # Verify extraction
-    if [ -d "$DATA_DIR/train/images" ]; then
-        print_status "Training images extracted successfully!"
-        print_status "Removing compressed archive to save space..."
-        rm images.tar.gz
-    else
-        print_error "Failed to extract training images!"
-        exit 1
-    fi
+if [ -f "$DATA_DIR/test/test.csv" ] && [ -d "$DATA_DIR/test/images" ]; then
+    print_status "Test dataset verified: CSV and images found"
 else
-    print_warning "Training images archive not found. Skipping extraction."
+    print_warning "Test dataset incomplete. Please check $DATA_DIR/test/"
 fi
-
-# Extract test images
-if [ -f "$DATA_DIR/test/images.tar.gz" ]; then
-    print_status "Extracting test images (~81GB compressed -> ~213GB extracted)..."
-    cd "$DATA_DIR/test"
-    $DECOMPRESS_CMD images.tar.gz | tar xf -
-
-    # Verify extraction
-    if [ -d "$DATA_DIR/test/images" ]; then
-        print_status "Test images extracted successfully!"
-        print_status "Removing compressed archive to save space..."
-        rm images.tar.gz
-    else
-        print_error "Failed to extract test images!"
-        exit 1
-    fi
-else
-    print_warning "Test images archive not found. Skipping extraction."
-fi
-
-# Return to home directory
-cd "$HOME"
-
-print_status "All datasets extracted and ready!"
 
 # Create a quick verification script
 print_status "Creating verification script..."
