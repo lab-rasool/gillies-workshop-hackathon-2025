@@ -232,7 +232,6 @@ datasets/
 # Model checkpoints and weights
 models/
 checkpoints/
-*.pt
 *.pth
 *.h5
 *.ckpt
